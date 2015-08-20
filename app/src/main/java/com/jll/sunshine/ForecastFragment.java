@@ -1,6 +1,8 @@
 package com.jll.sunshine;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.jll.sunshine.data.WeatherContract;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +38,7 @@ import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 
-    private ArrayAdapter<String> forecastAdapter;
+    private ForecastAdapter forecastAdapter;
 
 
 
@@ -78,7 +82,7 @@ public class ForecastFragment extends Fragment {
                 .getDefaultSharedPreferences(getActivity())
                 .getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
 
-        FetchWeatherTask fetcher = new FetchWeatherTask(this.getActivity(), forecastAdapter);
+        FetchWeatherTask fetcher = new FetchWeatherTask(this.getActivity());
         fetcher.execute(postalCode);
     }
 
@@ -88,26 +92,25 @@ public class ForecastFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 
+        Context context = this.getActivity();
+        String locationSetting = Utility.getPreferredLocation(context);
 
-        forecastAdapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.list_item_forecast,
-                R.id.list_item_forecast_textview,
-                new ArrayList<String>());
+        Uri queryUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(locationSetting, System.currentTimeMillis());
+
+        Cursor cursor = context.getContentResolver().query(
+                queryUri,
+                null,
+                null,
+                null,
+                WeatherContract.WeatherEntry.COLUMN_DATE + " ASC"
+
+        );
+
+        forecastAdapter = new ForecastAdapter(context, cursor, 0);
 
         ListView forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         forecastListView.setAdapter(forecastAdapter);
-        forecastListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String forecastItem = forecastAdapter.getItem(position);
-                Intent startIntent = new Intent(getActivity(), DetailActivity.class);
-                startIntent.putExtra(Intent.EXTRA_TEXT, forecastItem);
-                startActivity(startIntent);
-
-            }
-        });
 
         return rootView;
     }
