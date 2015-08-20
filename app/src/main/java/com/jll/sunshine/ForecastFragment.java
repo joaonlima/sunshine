@@ -1,46 +1,30 @@
 package com.jll.sunshine;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
-import android.util.Log;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.jll.sunshine.data.WeatherContract;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 public class ForecastFragment extends Fragment {
 
+    private static final int FORECAST_LOADER_ID = 1;
+
     private ForecastAdapter forecastAdapter;
-
-
 
     public ForecastFragment() {
     }
@@ -74,6 +58,39 @@ public class ForecastFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+
+        LoaderManager.LoaderCallbacks<Cursor> loaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+                Context context = getActivity();
+                String locationSetting = Utility.getPreferredLocation(context);
+                Uri queryUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(locationSetting, System.currentTimeMillis());
+
+                return new CursorLoader(context, queryUri, null, null, null,
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " ASC");
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+                forecastAdapter.swapCursor(cursor);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> cursorLoader) {
+                forecastAdapter.swapCursor(null);
+
+            }
+        };
+        getActivity().getSupportLoaderManager().initLoader(FORECAST_LOADER_ID, null, loaderCallback);
 
     }
 
