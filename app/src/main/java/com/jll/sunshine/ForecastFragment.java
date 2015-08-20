@@ -1,6 +1,7 @@
 package com.jll.sunshine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,13 +17,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jll.sunshine.data.WeatherContract;
 
 public class ForecastFragment extends Fragment {
 
-    private static final int FORECAST_LOADER_ID = 1;
+    private static final int FORECAST_LOADER_ID = 0;
 
     private ForecastAdapter forecastAdapter;
 
@@ -75,7 +77,7 @@ public class ForecastFragment extends Fragment {
                 String locationSetting = Utility.getPreferredLocation(context);
                 Uri queryUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(locationSetting, System.currentTimeMillis());
 
-                return new CursorLoader(context, queryUri, null, null, null,
+                return new CursorLoader(context, queryUri, WeatherContract.ForecastProjection.FORECAST_COLUMNS, null, null,
                         WeatherContract.WeatherEntry.COLUMN_DATE + " ASC");
             }
 
@@ -127,6 +129,26 @@ public class ForecastFragment extends Fragment {
 
         ListView forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         forecastListView.setAdapter(forecastAdapter);
+        forecastListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Cursor itemCursor = (Cursor) parent.getItemAtPosition(position);
+                if (itemCursor != null) {
+                    Context context = getActivity();
+
+                    String locationSetting = Utility.getPreferredLocation(context);
+                    Intent detailIntent = new Intent(context, DetailActivity.class);
+                    detailIntent.setData(
+                            WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting,
+                                    itemCursor.getLong(WeatherContract.ForecastProjection.COL_WEATHER_DATE)));
+                    startActivity(detailIntent);
+
+
+                }
+
+            }
+        });
 
 
         return rootView;
