@@ -128,7 +128,7 @@ public class DetailActivity extends ActionBarActivity {
             MenuItem item = menu.findItem(R.id.action_share);
             shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
-            if (shareActionProvider != null ) {
+            if (shareActionProvider != null && forecastStr != null && !forecastStr.isEmpty()) {
                 shareActionProvider.setShareIntent(createShareForecastIntent());
             } else {
                 Log.d(LOG_TAG, "Share Action Provider is null?");
@@ -156,11 +156,13 @@ public class DetailActivity extends ActionBarActivity {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.i("aaaaa", String.valueOf(data));
-
             if(data.moveToFirst()) {
                 forecastStr = convertCursorRowToUXFormat(data);
                 forecastView.setText(forecastStr);
+
+                if (shareActionProvider != null ) {
+                    shareActionProvider.setShareIntent(createShareForecastIntent());
+                }
             }
 
 
