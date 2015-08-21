@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jll.sunshine.data.WeatherContract;
-import static com.jll.sunshine.data.WeatherContract.WeatherEntry.COLUMN_DATE;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -157,9 +156,14 @@ public class DetailActivity extends ActionBarActivity {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.i(this.getClass().getSimpleName(), String.valueOf(data));
-            forecastStr = convertCursorRowToUXFormat(data);
-            forecastView.setText(forecastStr);
+            Log.i("aaaaa", String.valueOf(data));
+
+            if(data.moveToFirst()) {
+                forecastStr = convertCursorRowToUXFormat(data);
+                forecastView.setText(forecastStr);
+            }
+
+
         }
 
         @Override
