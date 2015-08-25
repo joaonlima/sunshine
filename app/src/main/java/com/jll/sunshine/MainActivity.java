@@ -11,19 +11,44 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    private static final String FORECASTFRAGMENT_TAG = "FORECASTFRAGMENT_TAG";
+
+    private String mLocation;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLocation = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENT_TAG)
                     .commit();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String currentLocation = Utility.getPreferredLocation(this);
+        boolean locationHasChanged = currentLocation != null && !currentLocation.equals(mLocation);
+        if(locationHasChanged) {
+            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if (ff != null) {
+                ff.onLocationChanged();
+            }
+
+            mLocation = Utility.getPreferredLocation(this);
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
 
             Intent viewLocation = new Intent(Intent.ACTION_VIEW);
             String location = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(getString(R.string.pref_location_key), getString(R.string.pref_unit_default));
+                    .getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
             Uri locationUri = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q", location).build();
             viewLocation.setData(locationUri);
 
