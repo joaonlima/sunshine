@@ -1,5 +1,9 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<LinearLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:padding="16dp"
@@ -114,3 +118,4 @@
 
 
 </LinearLayout>
+</ScrollView>
