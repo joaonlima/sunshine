@@ -121,7 +121,5 @@ public class ForecastAdapter extends CursorAdapter {
 
         viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
 
-
-
     }
 }
