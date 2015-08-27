@@ -107,8 +107,12 @@ public class ForecastAdapter extends CursorAdapter {
 
         boolean isMetric = Utility.isMetric(mContext);
 
-        viewHolder.highTempView.setText(Utility.formatTemperature(cursor.getDouble(WeatherContract.ForecastProjection.COL_WEATHER_MAX_TEMP), isMetric));
-        viewHolder.lowTempView.setText(Utility.formatTemperature(cursor.getDouble(WeatherContract.ForecastProjection.COL_WEATHER_MIN_TEMP), isMetric));
+        viewHolder.highTempView.setText(
+                Utility.formatTemperature(
+                        context, cursor.getDouble(WeatherContract.ForecastProjection.COL_WEATHER_MAX_TEMP), isMetric));
+        viewHolder.lowTempView.setText(
+                Utility.formatTemperature(
+                        context, cursor.getDouble(WeatherContract.ForecastProjection.COL_WEATHER_MIN_TEMP), isMetric));
 
 
         // Read weather icon ID from cursor
