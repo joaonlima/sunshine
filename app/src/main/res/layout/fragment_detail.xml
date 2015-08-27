@@ -1,12 +1,116 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.jll.sunshine.DetailActivity.DetailFragment">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    >
 
-    <TextView android:id="@+id/forecast_text" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/detail_simple_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XXXToday"/>
+
+        <TextView
+            android:id="@+id/detail_full_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XXXJune 24"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/detail_high_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXX21"/>
+
+            <TextView
+                android:id="@+id/detail_low_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXX18"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/detail_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/detail_forecast_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXXClear"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/detail_humidity_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XXXHumidity: 84%"
+            />
+
+        <TextView
+            android:id="@+id/detail_wind_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XXXWind: 6 km/h NW"
+            />
+
+        <TextView
+            android:id="@+id/detail_pressure_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XXXHumidity: 1014 hPa"
+            />
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
