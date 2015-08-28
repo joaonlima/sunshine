@@ -157,9 +157,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         context, cursor.getDouble(COL_WEATHER_MIN_TEMP), isMetric));
 
                 // Read weather icon ID from cursor
-                int weatherId = cursor.getInt(COL_WEATHER_ID);
+                int weatherId = cursor.getInt(COL_WEATHER_CONDITION_ID);
                 // FIXME Use placeholder image for now
-                iconView.setImageResource(R.drawable.ic_launcher);
+                iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
                 forecastView.setText(cursor.getString(COL_WEATHER_DESC));
                 humidityView.setText(getString(R.string.format_humidity, cursor.getFloat(COL_WEATHER_HUMIDITY)));

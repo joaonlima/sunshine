@@ -116,10 +116,16 @@ public class ForecastAdapter extends CursorAdapter {
 
 
         // Read weather icon ID from cursor
-        int weatherId = cursor.getInt(WeatherContract.ForecastProjection.COL_WEATHER_ID);
-        // FIXME Use placeholder image for now
+        int weatherId = cursor.getInt(WeatherContract.ForecastProjection.COL_WEATHER_CONDITION_ID);
+        boolean isTodayType = getItemViewType(cursor.getPosition()) == ForecastViewType.TODAY.id;
+        int iconId = -1;
+        if(isTodayType) {
+            iconId = Utility.getArtResourceForWeatherCondition(weatherId);
+        } else {
+            iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+        }
 
-        viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
+        viewHolder.iconView.setImageResource(iconId);
 
     }
 }
