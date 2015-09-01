@@ -11,11 +11,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String FORECASTFRAGMENT_TAG = "FORECASTFRAGMENT_TAG";
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     private String mLocation;
-
-
+    private boolean mTwoPane;
 
 
     @Override
@@ -23,14 +22,20 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        mTwoPane = findViewById(R.id.weather_detail_container) == null ? false : true;
+        if(mTwoPane) {
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }
+
+
         mLocation = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENT_TAG)
-                    .commit();
-        }
     }
 
     @Override
@@ -40,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         String currentLocation = Utility.getPreferredLocation(this);
         boolean locationHasChanged = currentLocation != null && !currentLocation.equals(mLocation);
         if(locationHasChanged) {
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (ff != null) {
                 ff.onLocationChanged();
             }

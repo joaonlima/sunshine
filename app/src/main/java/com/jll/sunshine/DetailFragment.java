@@ -1,6 +1,7 @@
 package com.jll.sunshine;
 
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -95,6 +96,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             if(intent != null) {
                 forecastUri = intent.getData();
                 getActivity().getSupportLoaderManager().initLoader(DETAIL_LOADER_ID, null, this);
+            } else {
+                forecastUri = null;
             }
 
             return rootView;
@@ -130,6 +133,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            if(forecastUri == null) {
+                return null;
+            }
+
             return new CursorLoader(getActivity(), forecastUri,
                     FORECAST_COLUMNS,
                     null,
