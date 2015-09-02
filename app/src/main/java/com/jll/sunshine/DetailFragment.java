@@ -27,7 +27,8 @@ import com.jll.sunshine.data.WeatherContract;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-        private static int DETAIL_LOADER_ID = 1;
+    public static final String ARGUMENT_FORECAST_URI = "forecastUri";
+    private static int DETAIL_LOADER_ID = 1;
 
         public static final String[] FORECAST_COLUMNS = {
                 WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
@@ -73,6 +74,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         private TextView pressureView;
 
 
+        public static DetailFragment newInstance(Uri forecastUri) {
+            DetailFragment f = new DetailFragment();
+
+            // Supply index input as an argument.
+            Bundle args = new Bundle();
+            args.putParcelable(ARGUMENT_FORECAST_URI, forecastUri);
+            f.setArguments(args);
+
+            return f;
+        }
+
         public DetailFragment() {
             setHasOptionsMenu(true);
         }
@@ -92,9 +104,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             windView = (TextView) rootView.findViewById(R.id.detail_wind_textview);
             pressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
 
-            Intent intent = getActivity().getIntent();
-            if(intent != null) {
-                forecastUri = intent.getData();
+
+            forecastUri = getArguments().getParcelable(ARGUMENT_FORECAST_URI);
+            if(forecastUri != null) {
                 getActivity().getSupportLoaderManager().initLoader(DETAIL_LOADER_ID, null, this);
             } else {
                 forecastUri = null;

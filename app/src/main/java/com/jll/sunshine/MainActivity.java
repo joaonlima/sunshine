@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
         if(mTwoPane) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                    .replace(R.id.weather_detail_container, DetailFragment.newInstance(dateUri), DETAILFRAGMENT_TAG)
                     .commit();
         } else {
             Intent detailIntent = new Intent(this, DetailActivity.class);
