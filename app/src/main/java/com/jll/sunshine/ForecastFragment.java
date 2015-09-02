@@ -28,6 +28,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private ForecastAdapter forecastAdapter;
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
+    }
+
     public ForecastFragment() {
     }
 
@@ -131,15 +143,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Cursor itemCursor = (Cursor) parent.getItemAtPosition(position);
+
+
+
                 if (itemCursor != null) {
                     Context context = getActivity();
 
                     String locationSetting = Utility.getPreferredLocation(context);
-                    Intent detailIntent = new Intent(context, DetailActivity.class);
-                    detailIntent.setData(
-                            WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting,
-                                    itemCursor.getLong(WeatherContract.ForecastProjection.COL_WEATHER_DATE)));
-                    startActivity(detailIntent);
+                    Callback callback = (Callback) getActivity();
+                    callback.onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting,
+                            itemCursor.getLong(WeatherContract.ForecastProjection.COL_WEATHER_DATE)));
 
 
                 }

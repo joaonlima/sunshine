@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jll.sunshine.data.WeatherContract;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
@@ -48,6 +50,11 @@ public class MainActivity extends ActionBarActivity {
             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (ff != null) {
                 ff.onLocationChanged();
+            }
+
+            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if ( null != df ) {
+                df.onLocationChanged(currentLocation);
             }
 
             mLocation = Utility.getPreferredLocation(this);
@@ -95,4 +102,18 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemSelected(Uri dateUri) {
+
+        if(mTwoPane) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent detailIntent = new Intent(this, DetailActivity.class);
+            detailIntent.setData(dateUri);
+            startActivity(detailIntent);
+        }
+
+    }
 }
