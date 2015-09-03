@@ -7,20 +7,46 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jll.sunshine.data.WeatherContract;
+
 
 public class DetailActivity extends ActionBarActivity {
+
+    private static final String DETAIL_FRAGMENT_ID = "DFID";
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
+            Uri detailUri = getIntent().getData();
+            mLocation = WeatherContract.WeatherEntry.getLocationSettingFromUri(detailUri);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.weather_detail_container, DetailFragment.newInstance(getIntent().getData()))
+                    .add(R.id.weather_detail_container, DetailFragment.newInstance(detailUri), DETAIL_FRAGMENT_ID)
                     .commit();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        String currentLocation = Utility.getPreferredLocation(this);
+        boolean locationHasChanged = currentLocation != null && !currentLocation.equals(mLocation);
+        if(locationHasChanged) {
+            DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.weather_detail_container);
+            if ( null != df ) {
+                df.onLocationChanged(currentLocation);
+            }
+
+            mLocation = currentLocation;
+        }
+        
+        
+        
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +15,7 @@ import com.jll.sunshine.data.WeatherContract;
 public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private String mLocation;
     private boolean mTwoPane;
@@ -25,8 +27,11 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         setContentView(R.layout.activity_main);
 
 
+
         mTwoPane = findViewById(R.id.weather_detail_container) == null ? false : true;
+        Log.i(TAG, "mTwoPane" + String.valueOf(mTwoPane));
         if(mTwoPane) {
+
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
@@ -105,7 +110,9 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     @Override
     public void onItemSelected(Uri dateUri) {
 
+        Log.i(TAG, "Passing dateUri="+String.valueOf(dateUri)+" twoPane="+String.valueOf(mTwoPane));
         if(mTwoPane) {
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.weather_detail_container, DetailFragment.newInstance(dateUri), DETAILFRAGMENT_TAG)
                     .commit();
