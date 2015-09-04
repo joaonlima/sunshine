@@ -92,15 +92,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if(getArguments() != null && getArguments().getParcelable(ARGUMENT_FORECAST_URI) != null) {
-            forecastUri = getArguments().getParcelable(ARGUMENT_FORECAST_URI);
-
-        } else {
-            forecastUri = null;
-        }
-
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
         simpleDateView = (TextView) rootView.findViewById(R.id.detail_simple_date_textview);
         fullDateView = (TextView) rootView.findViewById(R.id.detail_full_date_textview);
         highTempView = (TextView) rootView.findViewById(R.id.detail_high_textview);
@@ -112,6 +104,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         pressureView = (TextView) rootView.findViewById(R.id.detail_pressure_textview);
 
 
+        if(getArguments() != null && getArguments().getParcelable(ARGUMENT_FORECAST_URI) != null) {
+            forecastUri = getArguments().getParcelable(ARGUMENT_FORECAST_URI);
+            // Using restart instead of init due to tablet view (init does not work when realoding frame)
+            getActivity().getSupportLoaderManager().restartLoader(DETAIL_LOADER_ID, null, this);
+        } else {
+            forecastUri = null;
+        }
+
+
+
+
+
+
 
 
         return rootView;
@@ -119,7 +124,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getActivity().getSupportLoaderManager().initLoader(DETAIL_LOADER_ID, null, this);
+        Log.i(LOG_TAG, "DetailFragment onActivityCreated");
+
+
+
+
+
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -153,6 +163,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.i(LOG_TAG, "onCreateLoader");
         if(forecastUri == null) {
             Log.i(LOG_TAG, "Null forecastUri on initLoader");
             return null;
