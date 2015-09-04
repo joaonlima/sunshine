@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.jll.sunshine.data.WeatherContract;
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int FORECAST_LOADER_ID = 0;
+    private static final String TAG = ForecastFragment.class.getSimpleName();
 
     private ForecastAdapter forecastAdapter;
 
@@ -95,6 +97,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        if(!cursor.moveToFirst()) {
+            Log.i(TAG, "No results");
+            updateWeather();
+        }
+
         forecastAdapter.swapCursor(cursor);
     }
 
