@@ -8,8 +8,8 @@
 
 
     <ListView
+        style="@style/list_view_main_style"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
         android:id="@+id/listview_forecast"/>
 </FrameLayout>
