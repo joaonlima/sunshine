@@ -29,10 +29,11 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
 
         mTwoPane = findViewById(R.id.weather_detail_container) == null ? false : true;
-        Log.i(TAG, "mTwoPane" + String.valueOf(mTwoPane));
+        Log.i(TAG, "mTwoPane " + String.valueOf(mTwoPane));
         if(mTwoPane) {
 
             if (savedInstanceState == null) {
+                Log.i(TAG, "savedInstanceState not null");
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
                         .commit();
@@ -48,6 +49,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume");
 
         String currentLocation = Utility.getPreferredLocation(this);
         boolean locationHasChanged = currentLocation != null && !currentLocation.equals(mLocation);

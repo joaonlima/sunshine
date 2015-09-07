@@ -146,20 +146,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         Context context = this.getActivity();
-        String locationSetting = Utility.getPreferredLocation(context);
-
-        Uri queryUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(locationSetting, System.currentTimeMillis());
-
-        Cursor cursor = context.getContentResolver().query(
-                queryUri,
-                null,
-                null,
-                null,
-                WeatherContract.WeatherEntry.COLUMN_DATE + " ASC"
-
-        );
-
-        forecastAdapter = new ForecastAdapter(context, cursor, 0);
+        forecastAdapter = new ForecastAdapter(context, null, 0);
 
         mForecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         mForecastListView.setAdapter(forecastAdapter);
